@@ -1,0 +1,64 @@
+{
+  "name": "kairos-agent",
+  "version": "0.13.0",
+  "description": "KAIROS-AGENT — The self-improving AI agent that creates skills from experience, improves them during use, and runs anywhere",
+  "bin": {
+    "kairos": "bin/kairos.js",
+    "kairos-agent": "bin/kairos.js"
+  },
+  "scripts": {
+    "postinstall": "node bin/postinstall.js",
+    "postupdate": "node bin/postinstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NousResearch/hermes-agent.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "bin/",
+    "agent/",
+    "tools/",
+    "hermes_cli/",
+    "gateway/",
+    "tui_gateway/",
+    "cron/",
+    "acp_adapter/",
+    "acp_registry/",
+    "plugins/",
+    "providers/",
+    "skills/",
+    "optional-skills/",
+    "scripts/",
+    "environments/",
+    "batch_runner.py",
+    "cli.py",
+    "hermes_bootstrap.py",
+    "hermes_constants.py",
+    "hermes_logging.py",
+    "hermes_state.py",
+    "hermes_time.py",
+    "mcp_serve.py",
+    "model_tools.py",
+    "rl_cli.py",
+    "run_agent.py",
+    "toolset_distributions.py",
+    "toolsets.py",
+    "trajectory_compressor.py",
+    "utils.py",
+    "pyproject.toml",
+    "uv.lock",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@askjo/camofox-browser": "^1.5.2",
+    "agent-browser": "^0.26.0"
+  },
+  "overrides": {
+    "lodash": "4.18.1"
+  }
+}
