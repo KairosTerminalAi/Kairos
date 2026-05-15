@@ -131,19 +131,23 @@ else
   USE_UV=false
 fi
 
-# --- Clone ---
+# --- Clone / Update ---
 if [ -d "$INSTALL_DIR" ]; then
-  warn "Directory '$INSTALL_DIR' already exists."
-  if $IS_INTERACTIVE; then
-    read -p "  Overwrite? [y/N] " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-      log "Using existing directory."
-    else
-      rm -rf "$INSTALL_DIR"
-    fi
+  if [ -d "$INSTALL_DIR/.git" ]; then
+    log "Updating existing repository..."
+    cd "$INSTALL_DIR"
+    git fetch origin "$BRANCH"
+    git reset --hard "origin/$BRANCH"
+    ok "Repository updated to latest $BRANCH"
   else
-    log "Using existing directory."
+    warn "Directory '$INSTALL_DIR' exists but is not a git repo."
+    if $IS_INTERACTIVE; then
+      read -p "  Remove and re-clone? [y/N] " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -rf "$INSTALL_DIR"
+      fi
+    fi
   fi
 fi
 
