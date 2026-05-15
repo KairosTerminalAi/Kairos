@@ -25,7 +25,7 @@ BOLD='\033[1m'
 # Defaults
 INSTALL_DIR="${INSTALL_DIR:-$HOME/kairos-agent}"
 BRANCH="main"
-REPO_URL="${REPO_URL:-https://github.com/NousResearch/hermes-agent.git}"
+REPO_URL="${REPO_URL:-https://github.com/KairosTerminalAi/Kairos.git}"
 RUN_SETUP=true
 
 # Parse args

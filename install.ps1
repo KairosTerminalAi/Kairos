@@ -15,7 +15,7 @@ param(
     [switch]$SkipSetup,
     [string]$Branch = "main",
     [string]$InstallDir = "$env:USERPROFILE\kairos-agent",
-    [string]$RepoUrl = "https://github.com/NousResearch/hermes-agent.git"
+    [string]$RepoUrl = "https://github.com/KairosTerminalAi/Kairos.git"
 )
 
 $ErrorActionPreference = "Stop"
