@@ -75,17 +75,27 @@ Write-Success "git found"
 if (Test-Command uv) {
     Write-Success "uv found — will use for fast Python setup"
 } else {
-    Write-Warn "uv not found — will use Python venv + pip instead"
+    Write-Warn "uv not found — install it for best results:"
+    Write-Warn "  irm https://astral.sh/uv/install.ps1 | iex"
+    Write-Warn "Then reinstall: npm install -g kairos-agent"
     if (-not (Test-Command python3) -and -not (Test-Command python)) {
         Write-Err "Python 3.11+ is required if uv is not available."
-        Write-Err "Install Python from https://python.org/downloads/ or install uv: irm https://astral.sh/uv/install.ps1 | iex"
+        Write-Err "Install Python from https://python.org/downloads/ (check 'Add to PATH')"
         exit 1
     }
 }
 
-# --- Clone ---
+# --- Clone / Update ---
 if (Test-Path $InstallDir) {
-    Write-Warn "Directory '$InstallDir' already exists. Using existing."
+    if (Test-Path "$InstallDir\.git") {
+        Write-Info "Updating existing repository..."
+        Set-Location $InstallDir
+        git fetch origin $Branch
+        git reset --hard "origin/$Branch"
+        Write-Success "Repository updated to latest $Branch"
+    } else {
+        Write-Warn "Directory '$InstallDir' exists but is not a git repo."
+    }
 } else {
     Write-Info "Cloning repository (branch: $Branch)..."
     git clone --depth 1 --branch $Branch $RepoUrl $InstallDir
