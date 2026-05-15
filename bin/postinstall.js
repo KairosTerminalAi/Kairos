@@ -62,8 +62,11 @@ function installPythonMsg() {
 
 function setupPython() {
   if (existsSync(pythonBin())) {
-    ok("Python venv already exists");
-    return;
+    // Check if packages are actually installed
+    try { run(`"${pythonBin()}" -c "import hermes_cli"`); ok("Python venv already exists"); return; } catch {}
+    warn("Partial venv found — reinstalling...");
+    try { const { rmSync } = require("fs"); rmSync(VENV_DIR, { recursive: true, force: true }); } catch {}
+    try { const { rmSync } = require("fs"); rmSync(VENV_DIR + ".old", { recursive: true, force: true }); } catch {}
   }
 
   if (has("uv")) {
