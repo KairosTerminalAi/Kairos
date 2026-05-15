@@ -1,6 +1,6 @@
 {
   "name": "kairos-agent",
-  "version": "0.13.0",
+  "version": "1.0.0",
   "description": "KAIROS-AGENT — The self-improving AI agent that creates skills from experience, improves them during use, and runs anywhere",
   "bin": {
     "kairos": "bin/kairos.js",
