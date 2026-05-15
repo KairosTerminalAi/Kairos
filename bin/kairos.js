@@ -73,7 +73,38 @@ function main() {
   }
 
   const args = process.argv.slice(2);
-  python = findPython(); // refresh in case postinstall changed it
+  python = findPython();
+
+  // First run detection: no args and no config → auto-launch setup
+  const isFirstRun = args.length === 0 && (() => {
+    try {
+      const { execSync } = require("child_process");
+      const { existsSync } = require("fs");
+      const { homedir } = require("os");
+      const hermesHome = process.env.HERMES_HOME || require("path").join(homedir(), ".hermes");
+      return !existsSync(require("path").join(hermesHome, "config.yaml"));
+    } catch { return false; }
+  })();
+
+  if (isFirstRun) {
+    console.log("\n\x1b[36m\u2192\x1b[0m First run detected — launching setup wizard...\n");
+    const setup = spawn(python, ["-m", "hermes_cli.main", "setup"], {
+      cwd: ROOT, stdio: "inherit",
+      env: { ...process.env, KAIROS_AGENT: "1", NODE_OPTIONS: undefined },
+    });
+    setup.on("exit", () => {
+      // After setup, launch the normal CLI
+      const proc = spawn(python, ["-m", "hermes_cli.main"], {
+        cwd: ROOT, stdio: "inherit",
+        env: { ...process.env, KAIROS_AGENT: "1", NODE_OPTIONS: undefined },
+      });
+      proc.on("exit", (c) => process.exit(c ?? 1));
+      proc.on("error", (e) => { console.error("\x1b[31m\u2717\x1b[0m", e.message); process.exit(1); });
+    });
+    setup.on("error", (e) => { console.error("\x1b[31m\u2717\x1b[0m", e.message); process.exit(1); });
+    return;
+  }
+
   const proc = spawn(python, ["-m", "hermes_cli.main", ...args], {
     cwd: ROOT,
     stdio: "inherit",
